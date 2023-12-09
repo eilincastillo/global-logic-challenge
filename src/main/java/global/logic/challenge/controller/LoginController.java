@@ -10,9 +10,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 
 @RestController
@@ -24,15 +27,15 @@ public class LoginController {
 
     private final LoginService loginService;
 
-    @PostMapping(path = {"/sign-up"}, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserLoginResponseDTO> signUp(SignUpRequestDTO signUpRequestDTO) {
-        UserLoginResponseDTO userLoginResponseDTO = loginService.signUp(signUpRequestDTO);
-        return new ResponseEntity<>(userLoginResponseDTO, HttpStatus.CREATED);
+    @PostMapping(value = "/sign-up", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<UserLoginResponseDTO> signUp(@Valid @RequestBody SignUpRequestDTO signUpRequestDTO) {
+        log.info("[signUp: {}]", signUpRequestDTO.toString());
+        return new ResponseEntity<>(loginService.signUp(signUpRequestDTO), HttpStatus.CREATED);
     }
 
-    @PostMapping(path = {"/login"}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value= "/login", consumes = "application/json", produces = "application/json")
     public ResponseEntity<UserLoginResponseDTO> login(@RequestHeader("Authorization") String authorization) {
-        UserLoginResponseDTO userLoginResponseDTO = loginService.login(authorization);
-        return new ResponseEntity<>(userLoginResponseDTO, HttpStatus.ACCEPTED);
+        log.info("[login: {}]", authorization);
+        return new ResponseEntity<>(loginService.login(authorization), HttpStatus.ACCEPTED);
     }
 }
