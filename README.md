@@ -1,2 +1,2 @@
-# global-logic-challenge
-Global logic challenge
+# Getting Started
+Global Logic Challenge
