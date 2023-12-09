@@ -6,19 +6,37 @@ import global.logic.challenge.exception.UserException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 @ControllerAdvice
 @RestController
 @Slf4j
-public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
+public class CustomExceptionHandler  {
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public final ResponseEntity<ErrorResponseDTO> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        List<ErrorDTO> errorList = new ArrayList<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            ErrorDTO errorDTO = ErrorDTO.builder()
+                    .timestamp(new Timestamp(System.currentTimeMillis()))
+                    .code(HttpStatus.BAD_REQUEST.value())
+                    .detail(error.getDefaultMessage())
+                    .build();
+            errorList.add(errorDTO);
+        });
+        ErrorResponseDTO responseException = ErrorResponseDTO.builder()
+                .error(errorList)
+                .build();
+        return new ResponseEntity<>(responseException, HttpStatus.BAD_REQUEST);
+    }
     @ExceptionHandler(UserException.class)
     public final ResponseEntity<ErrorResponseDTO> handleClientException(UserException ex) {
         ErrorDTO errorDTO = ErrorDTO.builder()
