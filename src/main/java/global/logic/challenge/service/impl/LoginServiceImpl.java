@@ -134,6 +134,7 @@ public class LoginServiceImpl implements LoginService  {
 
     private User refreshUserToken(User user) {
         user.setToken(generateToken(user.getEmail()));
+        user.setLastLogin(new Date());
         return userRepository.save(user);
     }
 

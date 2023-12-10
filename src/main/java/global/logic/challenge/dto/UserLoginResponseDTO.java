@@ -14,7 +14,7 @@ import java.util.List;
 @Builder
 public class UserLoginResponseDTO {
 
-    private Long id;
+    private String id;
     private LocalDateTime created;
     private LocalDateTime lastLogin;
     private String token;

@@ -91,7 +91,7 @@ class LoginServiceImplTest {
     }
 
     private User createUser() {
-        return User.builder().id(45445L)
+        return User.builder().id("45445L")
                 .created(new Date())
                 .lastLogin(new Date())
                 .email("test@example.com")
