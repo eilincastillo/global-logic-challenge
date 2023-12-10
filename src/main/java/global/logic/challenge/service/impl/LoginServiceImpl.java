@@ -10,6 +10,7 @@ import global.logic.challenge.model.User;
 import global.logic.challenge.repository.PhoneRepository;
 import global.logic.challenge.repository.UserRepository;
 import global.logic.challenge.service.LoginService;
+import global.logic.challenge.util.DateUtil;
 import global.logic.challenge.util.JwtUtil;
 import global.logic.challenge.util.PasswordUtil;
 import javassist.NotFoundException;
@@ -53,8 +54,8 @@ public class LoginServiceImpl implements LoginService  {
         savePhone(signUpRequestDTO, user);
         return UserLoginResponseDTO.builder()
                 .id(user.getId())
-                .created(convertToDate(user.getCreated()))
-                .lastLogin(convertToDate(user.getLastLogin()))
+                .created(DateUtil.convertToDate(user.getCreated()))
+                .lastLogin(DateUtil.convertToDate(user.getLastLogin()))
                 .token(user.getToken())
                 .isActive(user.getIsActive())
                 .build();
@@ -86,7 +87,6 @@ public class LoginServiceImpl implements LoginService  {
 
     private String generateToken(String username) {
         return JwtUtil.generateToken(username);
-        //return JwtUtil.createToken(username);
     }
 
     @Override
@@ -107,8 +107,8 @@ public class LoginServiceImpl implements LoginService  {
         });
         return UserLoginResponseDTO.builder()
                 .id(user.getId())
-                .created(convertToDate(user.getCreated()))
-                .lastLogin(convertToDate(user.getLastLogin()))
+                .created(DateUtil.convertToDate(user.getCreated()))
+                .lastLogin(DateUtil.convertToDate(user.getLastLogin()))
                 .token(user.getToken())
                 .isActive(user.getIsActive())
                 .name(user.getName())
@@ -131,8 +131,6 @@ public class LoginServiceImpl implements LoginService  {
         return PhoneMapper.INSTANCE.phoneToPhoneDTO(phone);
     }
 
-    private LocalDateTime convertToDate(Date date) {
-        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-    }
+
 
 }
