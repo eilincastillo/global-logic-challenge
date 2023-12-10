@@ -3,6 +3,7 @@ package global.logic.challenge.controller;
 import global.logic.challenge.dto.SignUpRequestDTO;
 import global.logic.challenge.dto.UserLoginResponseDTO;
 import global.logic.challenge.service.LoginService;
+import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -33,8 +34,8 @@ public class LoginController {
         return new ResponseEntity<>(loginService.signUp(signUpRequestDTO), HttpStatus.CREATED);
     }
 
-    @PostMapping(value= "/login", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<UserLoginResponseDTO> login(@RequestHeader("Authorization") String authorization) {
+    @PostMapping(value= "/login", produces = "application/json")
+    public ResponseEntity<UserLoginResponseDTO> login(@RequestHeader("Authorization") String authorization) throws NotFoundException {
         log.info("[login: {}]", authorization);
         return new ResponseEntity<>(loginService.login(authorization), HttpStatus.ACCEPTED);
     }

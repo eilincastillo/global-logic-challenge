@@ -1,11 +1,13 @@
 package global.logic.challenge.util;
 import io.jsonwebtoken.*;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+@Component
 public class JwtUtil {
-    /*TODO: The SECRET will be in a security plase like a keys in a Cloud provider or a config file*/
-    private static final String SECRET = "my-32-character-ultra-secure-and-ultra-long-secret";
+
+    private static final String SECRET = "my32characterultrasecureandultra-ongsecret";
     private static final long EXPIRATION_TIME = 86_4000_00; // 1 day
     public static String generateToken(String username) {
         return Jwts.builder()
@@ -21,4 +23,19 @@ public class JwtUtil {
                 .getBody()
                 .getSubject();
     }
+
+    public static boolean validateToken(String token, String username) {
+        try {
+            Jws<Claims> claimsJws = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token);
+            return username.equals(claimsJws.getBody().getSubject()) && !isTokenExpired(claimsJws.getBody().getExpiration());
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+
+    private static boolean isTokenExpired(Date expiration) {
+        return expiration.before(new Date());
+    }
+
 }
