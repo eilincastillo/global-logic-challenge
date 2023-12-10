@@ -64,7 +64,7 @@ Response example
 }
 ```
 
-To search the user information by his jwt
+To search the user information by its jwt
 
 ```
 curl --location --request POST 'http://localhost:8080/login' \
@@ -94,6 +94,9 @@ Response example
 }
 ```
 
+## Diagrams
+
+The diagrams are in this route: https://github.com/eilincastillo/global-logic-challenge/tree/main/diagrams
 
 
 
