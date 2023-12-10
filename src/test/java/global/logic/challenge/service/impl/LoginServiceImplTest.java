@@ -69,6 +69,7 @@ class LoginServiceImplTest {
         String fakeToken = JwtUtil.generateToken("test@example.com");
         User user = createUser();
         Mockito.when(userRepository.findByEmail(any(String.class))).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.save(any())).thenReturn(user);
         Mockito.when(phoneRepository.findByUser(any())).thenReturn(createPhone_user(user));
 
         UserLoginResponseDTO responseDTO = loginService.login("Bearer "+ fakeToken);

@@ -105,6 +105,7 @@ public class LoginServiceImpl implements LoginService  {
             log.error("User not found: {}", email);
             return new NotFoundException("User not found");
         });
+        user = refreshUserToken(user);
         return UserLoginResponseDTO.builder()
                 .id(user.getId())
                 .created(DateUtil.convertToDate(user.getCreated()))
@@ -127,10 +128,13 @@ public class LoginServiceImpl implements LoginService  {
                 .collect(Collectors.toList());
     }
 
-    public PhoneDTO phoneToPhoneDTO(Phone phone) {
+    private PhoneDTO phoneToPhoneDTO(Phone phone) {
         return PhoneMapper.INSTANCE.phoneToPhoneDTO(phone);
     }
 
-
+    private User refreshUserToken(User user) {
+        user.setToken(generateToken(user.getEmail()));
+        return userRepository.save(user);
+    }
 
 }
